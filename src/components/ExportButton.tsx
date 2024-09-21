@@ -1,39 +1,38 @@
-import * as htmlToImage from "html-to-image";
-import { FC } from "react";
+import html2canvas from "html2canvas";
+import { FC, RefObject } from "react";
 
 interface ExportButtonProps {
-  elementId: string;
+  targetRef: RefObject<HTMLDivElement>;
+  imagesLoaded: boolean;
 }
 
-const ExportButton: FC<ExportButtonProps> = ({ elementId }) => {
-  const exportAsImage = () => {
-    const node = document.getElementById(elementId);
-    if (!node) {
-      console.error(`Element with id ${elementId} not found`);
-      return;
-    }
-
-    htmlToImage
-      .toPng(node)
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = "tierlist.png";
-        link.click();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'export en image", error);
+export const ExportButton: FC<ExportButtonProps> = ({
+  targetRef,
+  imagesLoaded,
+}) => {
+  const handleExport = async () => {
+    if (targetRef.current && imagesLoaded) {
+      const canvas = await html2canvas(targetRef.current, {
+        backgroundColor: "#fff",
+        useCORS: true,
+        allowTaint: true,
       });
+
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "animes-tierlist.png";
+      link.click();
+    }
   };
 
   return (
     <button
-      onClick={exportAsImage}
-      className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600 transition-colors"
+      onClick={handleExport}
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+      disabled={!imagesLoaded}
     >
-      Exporter en image
+      {imagesLoaded ? "Exporter en image" : "Chargement des images..."}
     </button>
   );
 };
-
-export default ExportButton;

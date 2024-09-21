@@ -1,38 +1,41 @@
+import { useDraggable } from "@dnd-kit/core";
 import { FC } from "react";
-import { Anime } from "../types/anime";
+import { Anime } from "../types";
 
 interface AnimeCardProps {
   anime: Anime;
 }
 
-const AnimeCard: FC<AnimeCardProps> = ({ anime }) => {
+export const AnimeCard: FC<AnimeCardProps> = ({ anime }) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: anime.id,
+  });
+
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
+
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden w-60">
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="relative w-32 h-48 m-2 rounded-lg overflow-hidden shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl cursor-move group"
+    >
       <img
-        src={anime.coverImage.large}
-        alt={anime.title.romaji}
-        className="w-full h-80 object-cover"
+        src={anime.coverImage.medium}
+        alt={anime.title.userPreferred}
+        className="w-full h-full object-cover"
+        crossOrigin="anonymous"
       />
-      <div className="p-4">
-        <h3 className="text-lg font-bold">{anime.title.romaji}</h3>
-        {anime.genres && (
-          <div className="mt-2">
-            <h4 className="text-sm font-semibold text-gray-500">Genres :</h4>
-            <ul className="flex flex-wrap mt-1">
-              {anime.genres.map((genre, index) => (
-                <li
-                  key={index}
-                  className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded"
-                >
-                  {genre}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-2">
+        <span className="text-xs text-white font-semibold truncate">
+          {anime.title.userPreferred}
+        </span>
       </div>
     </div>
   );
 };
-
-export default AnimeCard;
