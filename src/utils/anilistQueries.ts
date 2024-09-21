@@ -13,6 +13,7 @@ query GetUserAnimeList($username: String!) {
           coverImage {
             medium
           }
+          isAdult
         }
       }
     }

@@ -27,11 +27,11 @@ export const useTierList = (initialAnimes: Anime[]) => {
     );
   }, []);
 
-  const deleteTier = useCallback((id: string) => {
-    setTiers((prevTiers) => prevTiers.filter((tier) => tier.id !== id));
+  const deleteTier = useCallback((tierId: string) => {
+    setTiers((prevTiers) => prevTiers.filter((tier) => tier.id !== tierId));
     setAnimes((prevAnimes) =>
       prevAnimes.map((anime) =>
-        anime.tierId === id ? { ...anime, tierId: undefined } : anime
+        anime.tierId === tierId ? { ...anime, tierId: undefined } : anime
       )
     );
   }, []);
@@ -79,8 +79,8 @@ export const useTierList = (initialAnimes: Anime[]) => {
   }, []);
 
   const updateTierName = useCallback((tierId: string, newName: string) => {
-    setTiers(prevTiers =>
-      prevTiers.map(tier =>
+    setTiers((prevTiers) =>
+      prevTiers.map((tier) =>
         tier.id === tierId ? { ...tier, name: newName } : tier
       )
     );

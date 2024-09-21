@@ -23,7 +23,7 @@ export const AnimeCard: FC<AnimeCardProps> = ({ anime }) => {
       style={style}
       {...attributes}
       {...listeners}
-      className="relative w-32 h-48 m-2 rounded-lg overflow-hidden shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl cursor-move group"
+      className="relative w-32 h-48 m-2 rounded-lg overflow-hidden shadow-md dark:shadow-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl dark:hover:shadow-gray-600 cursor-move group"
     >
       <img
         src={anime.coverImage.medium}
@@ -36,6 +36,11 @@ export const AnimeCard: FC<AnimeCardProps> = ({ anime }) => {
           {anime.title.userPreferred}
         </span>
       </div>
+      {anime.isAdult && (
+        <div className="absolute top-0 right-0 bg-red-500 dark:bg-red-600 text-white text-xs font-bold px-2 py-1 m-1 rounded-full">
+          18+
+        </div>
+      )}
     </div>
   );
 };
