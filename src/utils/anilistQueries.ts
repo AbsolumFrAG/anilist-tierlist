@@ -14,6 +14,7 @@ query GetUserAnimeList($username: String!) {
             medium
           }
           isAdult
+          format
         }
       }
     }

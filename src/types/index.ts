@@ -8,6 +8,7 @@ export interface Anime {
   };
   tierId?: string;
   isAdult: boolean;
+  format: string;
 }
 
 export interface Tier {
