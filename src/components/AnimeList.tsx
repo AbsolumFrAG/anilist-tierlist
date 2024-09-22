@@ -23,18 +23,15 @@ interface AnimeListProps {
 export const AnimeList: FC<AnimeListProps> = ({ username }) => {
   const { loading, error, animes: fetchedAnimes } = useAnilistData(username);
   const [includeAdult, setIncludeAdult] = useState(false);
-  const [selectedFormat, setSelectedFormat] = useState<AnimeFormat | "ALL">(
-    "ALL"
-  );
+  const [selectedFormats, setSelectedFormats] = useState<AnimeFormat[] | "ALL">("ALL");
 
   const filteredAnimes = useMemo(() => {
     return fetchedAnimes.filter((anime: Anime) => {
       const adultFilter = includeAdult ? true : !anime.isAdult;
-      const formatFilter =
-        selectedFormat === "ALL" ? true : anime.format === selectedFormat;
+      const formatFilter = selectedFormats === "ALL" ? true : selectedFormats.includes(anime.format as AnimeFormat);
       return adultFilter && formatFilter;
     });
-  }, [fetchedAnimes, includeAdult, selectedFormat]);
+  }, [fetchedAnimes, includeAdult, selectedFormats]);
 
   const {
     tiers,
@@ -97,8 +94,8 @@ export const AnimeList: FC<AnimeListProps> = ({ username }) => {
           <FilterControls
             includeAdult={includeAdult}
             onIncludeAdultChange={handleIncludeAdultChange}
-            selectedFormat={selectedFormat}
-            onFormatChange={setSelectedFormat}
+            selectedFormats={selectedFormats}
+            onFormatChange={setSelectedFormats}
           />
           <ExportButton targetRef={tierListRef} imagesLoaded={imagesLoaded} />
         </div>
